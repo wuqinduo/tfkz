@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>登录成功</title>
+	
+</head>
+<body>
+	<div>管理员</div>
+    <div>
+         id:$admin.id
+        username:$admin.username
+        password:$admin.password
+    </div>
+</body>
+</html>
