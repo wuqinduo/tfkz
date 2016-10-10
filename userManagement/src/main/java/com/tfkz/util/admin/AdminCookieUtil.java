@@ -26,7 +26,7 @@ public class AdminCookieUtil {
      
     public static void addLoginCookie(Admin admin, HttpServletResponse response){
         try{
-            CookieUtil.addCookie(COOKILE_NAME, AESUtil.encrypt(admin.toJson().substring(0, 10), Base64.decodeBase64(ENCRYPT_KEY)), DOMAIN, PATH, EXPIRY, response);
+            CookieUtil.addCookie(COOKILE_NAME, AESUtil.encrypt(admin.toJson(), Base64.decodeBase64(ENCRYPT_KEY)), DOMAIN, PATH, EXPIRY, response);
             CookieUtil.addCookie(USER_NAME, admin.getUsername(), DOMAIN, PATH, EXPIRY, response);
         }catch (Exception e) {
             e.printStackTrace();

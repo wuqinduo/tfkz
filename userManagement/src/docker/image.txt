@@ -1,0 +1,23 @@
+docker run -d -p 6379:6379 -e REDIS_PASS="**None**" redis
+
+
+docker run -d -p 6379:6379  dd9
+
+ docker exec -it dbc2b68c3f4d /bin/bash
+
+redis-cli -h 127.0.0.1
+
+keys *
+
+
+get keyName
+
+192.168.202.130:6379
+
+
+HASH操作：
+
+	hgetall USER_MANAGEMENT_MAP
+	
+	hget USER_MANAGEMENT_MAP 3（HGET key field ）
+	

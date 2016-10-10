@@ -45,4 +45,19 @@ public interface AdminMapper {
      * 返回主键
      */
    /* public int insertAdminWithBackId(Admin admin);*/
+    
+    /****************guava cache*****************/
+    @Select("SELECT * FROM userinfo WHERE username = #{username}")
+    @Results(value = { 
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "username", property = "username"),
+            @Result(column = "password", property = "password") })
+    public List<Admin> getUserByName(@Param("username") String username);
+    
+    @Select("SELECT * FROM userinfo WHERE id = #{id}")
+    @Results(value = { 
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "username", property = "username"),
+            @Result(column = "password", property = "password") })
+    public Admin selectById(@Param("id") int id);
 }

@@ -13,8 +13,13 @@
     
     <!-- 管理子模块 -->
     <modules>
+    	<!-- 顺序排列，参考依赖 -->
+    	<module>common</module><!-- 通用类模块 -->
+    	<module>cache</module><!-- 缓存模块 -->
+    	<module>rpc</module><!-- rpc模块 -->
         <module>data</module> <!-- 封装数据操作 -->
-		<module>userManagement</module> <!-- 具体业务1-人员管理系统 -->
+		<module>userManagement</module> <!-- 具体业务1-人员管理系统  这里的userManagement部署在serverA上（配合rpcWeb测试rpc）-->
+		<module>rpcWeb</module><!-- 具体业务2-用于测试RPC的另一台机器，这里的rpcWeb项目部署在serverB上 -->
     </modules>
 
     <properties>
@@ -26,6 +31,12 @@
 	 <!-- dependencyManagement不会引入实际的依赖，只是作为一个依赖池，供其和其子类使用 -->
     <dependencyManagement>
         <dependencies>
+        	<!-- 日志：若没有，activemq获取连接报错 -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.5.11</version>
+            </dependency>
             <!-- json -->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -129,12 +140,23 @@
                 <artifactId>httpclient</artifactId>
                 <version>4.2.6</version>
             </dependency>
+            
+            <!-- 字符串处理类 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 	
 	
 	 <!-- 引入实际依赖 -->
     <dependencies>
+    	<dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+         </dependency>
         <!-- json -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -158,6 +180,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
+        
+        <!-- 字符串处理类 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
     </dependencies>
 	
 	
@@ -174,6 +202,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>*.xml</include>
+                    <include>*.properties</include>
                 </includes>
             </resource>
             <!-- <resource>
@@ -224,6 +253,34 @@
                 <jdbc.url><![CDATA[jdbc:mysql://127.0.0.1:3306/blog?zeroDateTimeBehavior=convertToNull&amp;useUnicode=true&amp;characterEncoding=utf-8]]></jdbc.url>
                 <jdbc.username>root</jdbc.username>
                 <jdbc.password>123456</jdbc.password>
+                
+                
+                
+                 <!-- 
+                    redis:多台服务器支架用什么符号隔开无所谓，只要在程序中用相应的符号去分隔就好。
+                    这里只配置了一个redis.servers,如果系统特别大的时候，可以为每一种业务或某几种业务配置一个redis.xxx.servers 
+                -->
+                <redis.servers><![CDATA[192.168.202.130:6379]]></redis.servers>
+                <!-- 
+                    下边各个参数的含义在RedisFactory.java中有介绍，
+                    当我们三种环境(dev/rc/prod)下的一些参数都相同时，可以将这些参数直接设置到cache_conf.properties文件中去
+                -->
+                <redis.timeout>2000</redis.timeout><!-- 操作超时时间：2s,单位：ms -->
+                <redis.conf.lifo>true</redis.conf.lifo>
+                <redis.conf.maxTotal>64</redis.conf.maxTotal>
+                <redis.conf.blockWhenExhausted>true</redis.conf.blockWhenExhausted>
+                <redis.conf.maxWaitMillis>-1</redis.conf.maxWaitMillis>
+                
+                <redis.conf.testOnBorrow>false</redis.conf.testOnBorrow>
+                <redis.conf.testOnReturn>false</redis.conf.testOnReturn>
+                
+                <!-- 空闲连接相关 -->
+                <redis.conf.maxIdle>8</redis.conf.maxIdle>
+                <redis.conf.minIdle>0</redis.conf.minIdle>
+                <redis.conf.testWhileIdle>true</redis.conf.testWhileIdle>
+                <redis.conf.timeBetweenEvictionRunsMillis>30000</redis.conf.timeBetweenEvictionRunsMillis><!-- 30s -->
+                <redis.conf.numTestsPerEvictionRun>8</redis.conf.numTestsPerEvictionRun>
+                <redis.conf.minEvictableIdleTimeMillis>60000</redis.conf.minEvictableIdleTimeMillis><!-- 60s -->
             </properties>
         </profile>
 		

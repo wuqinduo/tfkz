@@ -28,4 +28,15 @@ public class AdminDao {
     public int insertAdminWithBackId(Admin admin){
         return adminMapper.insertAdminWithBackId(admin);
     }
+    
+    /******************guava cache********************/
+    public List<Admin> getUserByName(String username){
+        return adminMapper.getUserByName(username);
+    }
+    
+    /******************memcached********************/
+    public Admin getUserById(int id){
+            return adminMapper.selectById(id);
+    }
+    
 }

@@ -54,5 +54,26 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
         </dependency>
+        
+        <!-- guava cache -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0.1</version>
+        </dependency>
+        
+         <!-- 引入自定义cache模块 -->
+        <dependency>
+            <groupId>com.hotel.tfkz</groupId>
+    		<artifactId>tfkz-cache</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+		 <!-- 引入自定义rpc模块 -->
+        <dependency>
+            <groupId>com.hotel.tfkz</groupId>
+			<artifactId>tfkz-rpc</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+		
     </dependencies>
 </project>
