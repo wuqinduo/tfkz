@@ -15,8 +15,11 @@ import com.tfkz.cache.redis.RedisHashUtil;
 import com.tfkz.cache.redis.RedisStringUtil;
 import com.tfkz.cache.util.CachePrefix;
 import com.tfkz.cache.util.RedisCacheConstant;
+import com.tfkz.common.util.DateUtil;
 import com.tfkz.dao.userManagement.AdminDao;
 import com.tfkz.model.userManagement.Admin;
+import com.tfkz.model.userManagement.Log;
+import com.tfkz.rpc.mq.util.ActiveMQP2PUtil;
 import com.tfkz.vo.userManagement.AdminCacheKey;
 
 @Service
@@ -138,5 +141,31 @@ public class AdminService {
     	return admin;
     	
     }
+    /**
+     * 测试activeMQ
+     * 
+     * 消息生产者做的事：（部署在服务器A）
+     * 1）添加一个用户
+     * 2）用户添加成功后，
+     * 2.1）创建一个Log（日志类）实例
+     * 2.2）将该日志实例作为消息发送给消息队列
+     * 
+     * 消息消费者做的事：（部署在服务器B）
+     * 1）从队列接收消息
+     * 2）用日志处理器对消息进行操作（将该消息写入数据库）
+     */
+    public boolean registerLog(Admin admin) {
+        boolean isRegisterSuccess = adminDao.register(admin);
+        if(isRegisterSuccess) {
+            Log log = new Log();
+            log.setOperation("增加一个用户");
+            log.setCurrentTime(DateUtil.getCurrentTime());
+            
+            ActiveMQP2PUtil.sendMessage(log);//将消息发送到消息服务器（即activeMQ服务器），不需要等待消息处理结果，直接向下执行
+        }
+        return isRegisterSuccess;
+    }
+    
+    
 
 }

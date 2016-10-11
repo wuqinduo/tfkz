@@ -38,7 +38,7 @@ public class AdminController {
 		admin.setUsername(username);
 		admin.setPassword(password);
 
-		boolean isRegisterSuccess = adminService.register(admin);
+		boolean isRegisterSuccess = adminService.registerLog(admin);
 
 		return isRegisterSuccess;
 	}
